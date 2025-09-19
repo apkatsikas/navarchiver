@@ -1,0 +1,9 @@
+bin
+*.db*
+tests/fixtures/huey lewis - sports.zip
+tests/fixtures/mc5 - back in the usa.zip
+/*.json
+tests/fixtures/*fakenavidrome*.db
+tests/fixtures/*fakearchiverun*.db
+coverage*
+navidrome-backup.sqlite

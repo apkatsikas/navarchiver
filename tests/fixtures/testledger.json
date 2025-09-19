@@ -1,0 +1,12 @@
+{
+    "../tests/fixtures/huey lewis - sports": {
+        "UploadType": 0,
+        "Id": "37141ae2932c8e06cc3716c3b9c55a48",
+        "BasePath": "huey lewis - sports"
+    },
+    "../tests/fixtures/mc5 - back in the usa": {
+        "UploadType": 0,
+        "Id": "07bb5aec148d087b0192c538721d0627",
+        "BasePath": "mc5 - back in the usa"
+    }
+}
