@@ -93,17 +93,26 @@ func runBatch() error {
 }
 
 func performScheduledArchive() error {
-	fso := &fileutil.FileSystemOperator{}
+	arguments := flag.Args()
+
+	if len(arguments) < 2 {
+		return fmt.Errorf("scheduled mode requires arguments for navidrome DB path and archive DB path")
+	}
+
+	navidromeDbPath := arguments[0]
+	archiveDbPath := arguments[1]
 
 	sqliteHandlerArchiveRun := &db.SQLiteHandler{}
-	if err := sqliteHandlerArchiveRun.ConnectSQLite("archive_run.db"); err != nil {
+	if err := sqliteHandlerArchiveRun.ConnectSQLite(archiveDbPath); err != nil {
 		return err
 	}
 
 	sqliteNavidrome := &db.SQLiteHandler{}
-	if err := sqliteNavidrome.ConnectSQLite("navidrome.db"); err != nil {
+	if err := sqliteNavidrome.ConnectSQLite(navidromeDbPath); err != nil {
 		return err
 	}
+
+	fso := &fileutil.FileSystemOperator{}
 
 	runn := &runner.Runner{
 		FilterService:          &filter.FilterService{},
