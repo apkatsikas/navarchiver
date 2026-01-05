@@ -38,7 +38,7 @@ One nice way to run scheduled mode is a Linux cron job.
 
 An example cron command might look like:
 
-`cd /var/lib/navidrome && /opt/navarchiver/navarchiver >> /var/lib/navidrome/archiver.log 2>&1`
+`cd /var/lib/navidrome && /opt/navarchiver/navarchiver navidrome.db archive_run.db >> /var/lib/navidrome/archiver.log 2>&1`
 
 ## Batch
 
