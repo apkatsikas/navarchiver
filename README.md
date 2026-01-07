@@ -64,13 +64,11 @@ This mode is invoked using the `-runMode=ledger` flag, and takes 2 positional ar
 - Location of the Navidrome SQLite DB file
 - Destination for the ledger JSON file
 
-### Flags
-
 <h3>Flags</h3>
 
 <table>
   <colgroup>
-    <col style="width: 220px;">
+    <col style="width: 250px;">
     <col>
     <col style="width: 220px;">
     <col style="width: 140px;">
