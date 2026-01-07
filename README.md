@@ -66,8 +66,23 @@ This mode is invoked using the `-runMode=ledger` flag, and takes 2 positional ar
 
 ### Flags
 
-| Flag                    | Description                                                                                      | Valid Values / Format                                       | Default     |
-| ----------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- | ----------- |
-| `-runMode`              | Determines which mode the archiver runs in.                                                      | `scheduled`, `batch`, `ledger`                              | `scheduled` |
-| `-fileSizeLimit`        | Maximum allowed size for any single file. If a file exceeds this limit, the archiver will error. | Human-readable size (e.g., `10MB`, `1GB`, `500KB`, `1024B`) | `500MB`     |
-| `&#8209;fileCountLimit` | Maximum number of files allowed in a folder. If exceeded, the archiver will error.               | Integer value (`1`, `50`, `1000`, etc.)                     | `150`       |
+**`-runMode`**  
+Determines which mode the archiver runs in.  
+Valid values: `scheduled`, `batch`, `ledger`  
+Default: `scheduled`
+
+---
+
+**`-fileSizeLimit`**  
+Maximum allowed size for any single file.  
+If a file exceeds this limit, the archiver will error.  
+Format: human-readable size (e.g., `10MB`, `1GB`, `500KB`, `1024B`)  
+Default: `500MB`
+
+---
+
+**`-fileCountLimit`**  
+Maximum number of files allowed in a folder.  
+If exceeded, the archiver will error.  
+Format: integer value (e.g., `1`, `50`, `1000`)  
+Default: `150`
