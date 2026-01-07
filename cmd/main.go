@@ -28,13 +28,13 @@ func main() {
 		}
 		return
 	case flagutil.RunModeBatch:
-		if err := runBatch(); err != nil {
+		if err := runBatch(fu); err != nil {
 			panic(err)
 		}
 		return
 	}
 
-	err := performScheduledArchive()
+	err := performScheduledArchive(fu)
 	if err != nil {
 		errMsg := fmt.Sprintf("\nARCHIVER: Failed to perform scheduled archive - %v", err.Error())
 		alertErr := alert.SendAlert(errMsg)
@@ -68,7 +68,7 @@ func runLedger() error {
 	return nil
 }
 
-func runBatch() error {
+func runBatch(flagUtil *flagutil.FlagUtil) error {
 	arguments := flag.Args()
 
 	if len(arguments) < 1 {
@@ -78,12 +78,16 @@ func runBatch() error {
 	ledgerFile := arguments[0]
 
 	fso := &fileutil.FileSystemOperator{}
+
+	zipper := &zipper.Zipper{
+		FileSystemOperator: fso,
+	}
+	zipper.SetFileLimits(uint(flagUtil.FileSizeLimit), uint(flagUtil.FileCountLimit))
+
 	runn := &runner.Runner{
 		FileSystemOperator: fso,
-		Zipper: &zipper.Zipper{
-			FileSystemOperator: fso,
-		},
-		StorageClient: storageclient.New(),
+		Zipper:             zipper,
+		StorageClient:      storageclient.New(),
 	}
 
 	if err := runn.RunBatch(ledgerFile); err != nil {
@@ -92,7 +96,7 @@ func runBatch() error {
 	return nil
 }
 
-func performScheduledArchive() error {
+func performScheduledArchive(flagUtil *flagutil.FlagUtil) error {
 	arguments := flag.Args()
 
 	if len(arguments) < 2 {
@@ -113,6 +117,10 @@ func performScheduledArchive() error {
 	}
 
 	fso := &fileutil.FileSystemOperator{}
+	zipper := &zipper.Zipper{
+		FileSystemOperator: fso,
+	}
+	zipper.SetFileLimits(uint(flagUtil.FileSizeLimit), uint(flagUtil.FileCountLimit))
 
 	runn := &runner.Runner{
 		FilterService:          &filter.FilterService{},
@@ -121,10 +129,8 @@ func performScheduledArchive() error {
 		ArchiveRunRepository:   &db.ArchiveRunRepository{SqliteHandler: sqliteHandlerArchiveRun},
 		AdminRepository:        &db.AdminRepository{SqliteHandler: sqliteNavidrome},
 		LibraryRepository:      &db.LibraryRepository{SqliteHandler: sqliteNavidrome},
-		Zipper: &zipper.Zipper{
-			FileSystemOperator: fso,
-		},
-		FileSystemOperator: fso,
+		Zipper:                 zipper,
+		FileSystemOperator:     fso,
 	}
 
 	if err := runn.RunScheduled(); err != nil {

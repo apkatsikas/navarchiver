@@ -83,6 +83,88 @@ var _ = Describe("zipper when there are only files - integrated", func() {
 	})
 })
 
+var _ = Describe("zipper when there are only files - integrated - when user overrides file size and exceeds limit", func() {
+	const folderName = "huey lewis - sports"
+
+	var zipPath string
+	var zipError error
+	var expectedFilePath string
+
+	BeforeEach(func() {
+		dir, err := os.Getwd()
+		Expect(err).To(BeNil(), "Got an error getting working directory")
+		parentDir := filepath.Join(dir, "..")
+
+		fixturesDir := filepath.Join(parentDir, "tests", "fixtures")
+		folderPath := filepath.Join(fixturesDir, folderName)
+
+		fileSystemOperator := fileutil.FileSystemOperator{}
+
+		zipp := zipper.Zipper{FileSystemOperator: &fileSystemOperator}
+		zipp.SetFileLimits(1, 0)
+
+		expectedFilePath = fmt.Sprintf("%v.zip", folderPath)
+
+		err = testutils.RemoveFileIfExists(expectedFilePath)
+		Expect(err).To(BeNil(), "Got an error trying to remove test file")
+		Expect(testutils.FileExists(expectedFilePath)).To(BeFalse(), "Found unexpected test file")
+
+		// If we want to parallelize these, we can use a random string when creating the zip
+		// and delete it after the test run. As of now, they operate on the same file - could collide on
+		// a parallel run
+		zipPath, zipError = zipp.ZipFilesInFolder(folderPath)
+	})
+
+	It("should return an error", func() {
+		Expect(zipError).To(Not(BeNil()))
+	})
+
+	It("should return an empty file path", func() {
+		Expect(zipPath).To(BeEmpty())
+	})
+})
+
+var _ = Describe("zipper when there are only files - integrated - when user overrides file count and exceeds limit", func() {
+	const folderName = "huey lewis - sports"
+
+	var zipPath string
+	var zipError error
+	var expectedFilePath string
+
+	BeforeEach(func() {
+		dir, err := os.Getwd()
+		Expect(err).To(BeNil(), "Got an error getting working directory")
+		parentDir := filepath.Join(dir, "..")
+
+		fixturesDir := filepath.Join(parentDir, "tests", "fixtures")
+		folderPath := filepath.Join(fixturesDir, folderName)
+
+		fileSystemOperator := fileutil.FileSystemOperator{}
+
+		zipp := zipper.Zipper{FileSystemOperator: &fileSystemOperator}
+		zipp.SetFileLimits(0, 1)
+
+		expectedFilePath = fmt.Sprintf("%v.zip", folderPath)
+
+		err = testutils.RemoveFileIfExists(expectedFilePath)
+		Expect(err).To(BeNil(), "Got an error trying to remove test file")
+		Expect(testutils.FileExists(expectedFilePath)).To(BeFalse(), "Found unexpected test file")
+
+		// If we want to parallelize these, we can use a random string when creating the zip
+		// and delete it after the test run. As of now, they operate on the same file - could collide on
+		// a parallel run
+		zipPath, zipError = zipp.ZipFilesInFolder(folderPath)
+	})
+
+	It("should return an error", func() {
+		Expect(zipError).To(Not(BeNil()))
+	})
+
+	It("should return an empty file path", func() {
+		Expect(zipPath).To(BeEmpty())
+	})
+})
+
 var _ = Describe("zipper when there are a mix of folders and files", func() {
 	const folderPath = "/path/to/music/album"
 	const hueySong = "hue lou.mp3"
@@ -197,7 +279,7 @@ var _ = Describe("zipper when there are too many files", func() {
 
 	BeforeEach(func() {
 		gt := GinkgoT()
-		files := generateRandomStringSlice(150)
+		files := generateRandomStringSlice(151)
 		mockFileSystemOperator := mocks.NewIFileSystemOperator(gt)
 
 		setupFileNamesFromPath(mockFileSystemOperator, folderPath, files...)
@@ -301,7 +383,7 @@ func setupMockFileHelper(gt FullGinkgoTInterface, folderName string, fileName st
 	archiveFileInfo.EXPECT().IsDir().Return(false).Once()
 
 	if largeFile {
-		const fileSizeLimit = 524288000 // 500mb
+		const fileSizeLimit = 524288010 // 500mb and ten
 
 		archiveFileInfo.EXPECT().Size().Return(fileSizeLimit).Once()
 
