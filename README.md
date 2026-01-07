@@ -63,3 +63,11 @@ This mode is invoked using the `-runMode=ledger` flag, and takes 2 positional ar
 
 - Location of the Navidrome SQLite DB file
 - Destination for the ledger JSON file
+
+### Flags
+
+| Flag              | Description                                                                                      | Valid Values / Format                                       | Default     |
+| ----------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- | ----------- |
+| `-runMode`        | Determines which mode the archiver runs in.                                                      | `scheduled`, `batch`, `ledger`                              | `scheduled` |
+| `-fileSizeLimit`  | Maximum allowed size for any single file. If a file exceeds this limit, the archiver will error. | Human-readable size (e.g., `10MB`, `1GB`, `500KB`, `1024B`) | `500MB`     |
+| `-fileCountLimit` | Maximum number of files allowed in a folder. If exceeded, the archiver will error.               | Integer value (`1`, `50`, `1000`, etc.)                     | `150`       |
