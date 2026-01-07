@@ -14,7 +14,8 @@ import (
 
 const (
 	defaultFileCountLimit uint = 150
-	defaultFileSizeLimit  uint = 524288000 // 500mb
+	MB                         = 1024 * 1024
+	defaultFileSizeLimit  uint = 500 * MB
 )
 
 type Zipper struct {
