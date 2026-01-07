@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"sync"
+
+	"github.com/apkatsikas/archiver/fileutil"
 )
 
 type RunMode string
@@ -29,13 +31,17 @@ const (
 )
 
 type FlagUtil struct {
-	RunMode RunMode
+	RunMode        RunMode
+	FileSizeLimit  fileutil.FileSize
+	FileCountLimit fileutil.FileCount
 }
 
 func (fu *FlagUtil) Setup() {
 	flag.Var(&fu.RunMode, "runMode",
 		"Which mode to run archiver in - valid values are "+
 			"'scheduled', 'batch' or 'ledger' - default is scheduled")
+	flag.Var(&fu.FileSizeLimit, "fileSizeLimit", "Maximum size for a file, if exceeded the archiver will throw an error")
+	flag.Var(&fu.FileCountLimit, "fileCountLimit", "Maximum number of files allowed in a folder, if exeeded the archiver will throw an error")
 	flag.Parse()
 }
 

@@ -12,12 +12,17 @@ import (
 	"github.com/apkatsikas/archiver/fileutil"
 )
 
-const fileCountLimit = 150
-const fileSizeLimit = 524288000 // 500mb
+const (
+	defaultFileCountLimit uint = 150
+	MB                         = 1024 * 1024
+	defaultFileSizeLimit  uint = 500 * MB
+)
 
 type Zipper struct {
 	FileSystemOperator fileutil.IFileSystemOperator
 	builder            *zipBuilder
+	fileCountLimit     uint
+	fileSizeLimit      uint
 }
 
 type zipBuilder struct {
@@ -38,7 +43,18 @@ func (zb *zipBuilder) closeBuilder() {
 	}
 }
 
+func (z *Zipper) SetFileLimits(fileSizeLimit, fileCountLimit uint) {
+	z.fileSizeLimit = fileSizeLimit
+	z.fileCountLimit = fileCountLimit
+}
+
 func (z *Zipper) ZipFilesInFolder(folderPath string) (string, error) {
+	if z.fileCountLimit == 0 {
+		z.fileCountLimit = defaultFileCountLimit
+	}
+	if z.fileSizeLimit == 0 {
+		z.fileSizeLimit = defaultFileSizeLimit
+	}
 	z.builder = &zipBuilder{}
 	fileNames, err := z.FileSystemOperator.FileNamesFromPath(folderPath)
 
@@ -50,9 +66,9 @@ func (z *Zipper) ZipFilesInFolder(folderPath string) (string, error) {
 	}
 
 	fileCount := len(fileNames)
-	if fileCount >= fileCountLimit {
+	if fileCount > int(z.fileCountLimit) {
 		return "", fmt.Errorf(
-			"got %v files in folder %v, limit is %v", fileCount, folderPath, fileCountLimit)
+			"got %v files in folder %v, limit is %v", fileCount, folderPath, z.fileCountLimit)
 	}
 
 	for _, fileName := range fileNames {
@@ -106,8 +122,9 @@ func (z *Zipper) addToZip(folderPath string, fileName string) error {
 	if !pathInfo.IsDir() {
 
 		fileSize := pathInfo.Size()
-		if fileSize >= fileSizeLimit {
-			return fmt.Errorf("file %v size is %v. Limit is %v", joinedPath, fileSize, fileSizeLimit)
+		if fileSize > int64(z.fileSizeLimit) {
+			return fmt.Errorf("file %v size is %v. Limit is %v", joinedPath,
+				fileutil.FileSize(fileSize).String(), fileutil.FileSize(z.fileSizeLimit).String())
 		}
 
 		if !z.builder.createdZip {
