@@ -383,7 +383,7 @@ func setupMockFileHelper(gt FullGinkgoTInterface, folderName string, fileName st
 	archiveFileInfo.EXPECT().IsDir().Return(false).Once()
 
 	if largeFile {
-		const fileSizeLimit = 524288010 // 500mb and ten
+		const fileSizeLimit = 524288010 // 500mb plus 10 bytes
 
 		archiveFileInfo.EXPECT().Size().Return(fileSizeLimit).Once()
 
