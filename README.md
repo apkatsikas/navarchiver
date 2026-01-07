@@ -64,47 +64,10 @@ This mode is invoked using the `-runMode=ledger` flag, and takes 2 positional ar
 - Location of the Navidrome SQLite DB file
 - Destination for the ledger JSON file
 
-<h3>Flags</h3>
+### Flags
 
-<table>
-  <colgroup>
-    <col style="width: 250px;">
-    <col>
-    <col style="width: 220px;">
-    <col style="width: 140px;">
-  </colgroup>
-  <thead>
-    <tr>
-      <th>Flag</th>
-      <th>Description</th>
-      <th>Valid Values / Format</th>
-      <th>Default</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>-runMode</code></td>
-      <td>Determines which mode the archiver runs in.</td>
-      <td><code>scheduled</code>, <code>batch</code>, <code>ledger</code></td>
-      <td><code>scheduled</code></td>
-    </tr>
-    <tr>
-      <td><code>-fileSizeLimit</code></td>
-      <td>
-        Maximum allowed size for any single file.
-        If a file exceeds this limit, the archiver will error.
-      </td>
-      <td>Human-readable size (e.g. <code>10MB</code>, <code>1GB</code>, <code>500KB</code>, <code>1024B</code>)</td>
-      <td><code>500MB</code></td>
-    </tr>
-    <tr>
-      <td><code>-fileCountLimit</code></td>
-      <td>
-        Maximum number of files allowed in a folder.
-        If exceeded, the archiver will error.
-      </td>
-      <td>Integer value (e.g. <code>1</code>, <code>50</code>, <code>1000</code>)</td>
-      <td><code>150</code></td>
-    </tr>
-  </tbody>
-</table>
+| Flag                    | Description                                                                                      | Valid Values / Format                                       | Default     |
+| ----------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- | ----------- |
+| `-runMode`              | Determines which mode the archiver runs in.                                                      | `scheduled`, `batch`, `ledger`                              | `scheduled` |
+| `-fileSizeLimit`        | Maximum allowed size for any single file. If a file exceeds this limit, the archiver will error. | Human-readable size (e.g., `10MB`, `1GB`, `500KB`, `1024B`) | `500MB`     |
+| `&#8209;fileCountLimit` | Maximum number of files allowed in a folder. If exceeded, the archiver will error.               | Integer value (`1`, `50`, `1000`, etc.)                     | `150`       |
