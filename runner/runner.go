@@ -40,7 +40,7 @@ func (r *Runner) RunScheduled() error {
 	}
 
 	if lastRun == nil {
-		err := r.ArchiveRunRepository.UpdateLastRun(time.Now())
+		err := r.ArchiveRunRepository.UpdateLastRun(time.Now().UTC())
 		if err != nil {
 			return fmt.Errorf("failed to update last archive run: %v", err)
 		}
@@ -93,7 +93,7 @@ func (r *Runner) RunScheduled() error {
 		}
 	}
 
-	err = r.ArchiveRunRepository.UpdateLastRun(time.Now())
+	err = r.ArchiveRunRepository.UpdateLastRun(time.Now().UTC())
 	if err != nil {
 		return fmt.Errorf("failed to update last archive run: %v", err)
 	}
