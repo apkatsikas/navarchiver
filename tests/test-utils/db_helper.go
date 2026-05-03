@@ -10,7 +10,7 @@ import (
 )
 
 const sqliteBinary = "sqlite3"
-const dateFormat = "2006-01-02T15:04:05"
+const dateFormat = "2006-01-02 15:04:05"
 
 func SetupTestDb(name string) (string, error) {
 	dir, err := os.Getwd()

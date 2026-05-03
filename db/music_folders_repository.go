@@ -19,7 +19,7 @@ type MusicFoldersRepository struct {
 
 func (pr *MusicFoldersRepository) NewMediaFilesSinceDate(cutoffTime time.Time) ([]MediaFile, error) {
 	statement, err := pr.SqliteHandler.Db().Prepare(
-		"SELECT id, path, created_at, library_id FROM media_file WHERE created_at > ?")
+		"SELECT id, path, created_at, library_id FROM media_file WHERE datetime(created_at) > ?")
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,8 @@ func (pr *MusicFoldersRepository) NewMediaFilesSinceDate(cutoffTime time.Time) (
 func (mfr *MusicFoldersRepository) UpdatedMediaFilesSinceDate(cutoffTime time.Time) ([]MediaFile, error) {
 	statement, err := mfr.SqliteHandler.Db().Prepare(
 		"SELECT id, path, created_at, updated_at, library_id " +
-			"FROM media_file WHERE updated_at > created_at AND updated_at > ?")
+			"FROM media_file WHERE datetime(updated_at) > datetime(created_at) " +
+			"AND datetime(updated_at) > ?")
 	if err != nil {
 		return nil, err
 	}
