@@ -8,6 +8,7 @@ It runs in 3 modes:
 
 Tested on versions:
 
+- [v0.61.2](https://github.com/navidrome/navidrome/releases/tag/v0.61.2)
 - [v0.54.5](https://github.com/navidrome/navidrome/releases/tag/v0.54.5)
 - [v0.58.0](https://github.com/navidrome/navidrome/releases/tag/v0.58.0)
 
